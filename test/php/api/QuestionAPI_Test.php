@@ -22,7 +22,7 @@ class QuestionAPITestEnvironment
 	private $_idAdded = array();
 	
 	function __construct() {
-		$this->_api = new jsonRPCClient("http://scriptureforge-publishing.local/api/sf", false);
+		$this->_api = new jsonRPCClient("http://publishing.scriptureforge.local/api/sf", false);
 	}
 	
 	/**
@@ -56,7 +56,7 @@ class TestQuestionAPI extends UnitTestCase {
 		$e = new QuestionAPITestEnvironment();
 		$projectId = $e->createProject(RAPUMA_TEST_PROJECT);
 		$textId = $e->createText($projectId, 'Test Text 1');
-		$api = new jsonRPCClient("http://scriptureforge-publishing.local/api/sf", false);
+		$api = new jsonRPCClient("http://publishing.scriptureforge.local/api/sf", false);
 		
 		// List
 		$result = $api->question_list($projectId, $textId);

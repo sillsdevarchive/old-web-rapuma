@@ -10,7 +10,7 @@ class TestProjectAPI extends UnitTestCase {
 	}
 	
 	function testProjectCRUD_CRUDOK() {
-		$api = new jsonRPCClient("http://scriptureforge-publising.local/api/sf", false);
+		$api = new jsonRPCClient("http://publishing.scriptureforge.local/api/sf", false);
 		
 		// Create
 		$param = array(
@@ -37,14 +37,6 @@ class TestProjectAPI extends UnitTestCase {
 		// Delete
  		$result = $api->project_delete(array($id));
  		$this->assertTrue($result);
-		
-	}
-	
-	function testProjectList_Ok() {
-		$api = new jsonRPCClient("http://scriptureforge-publishing.local/api/sf", false);
-		$result = $api->project_list();
-		
-		$this->assertTrue($result['count'] > 0);
 		
 	}
 	

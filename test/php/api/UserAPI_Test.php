@@ -18,7 +18,7 @@ class UserAPITestEnvironment
 	private $_idAdded = array();
 	
 	function __construct() {
-		$this->_api = new jsonRPCClient("http://scriptureforge-publishing.local/api/sf", false);
+		$this->_api = new jsonRPCClient("http://publishing.scriptureforge.local/api/sf", false);
 		$e = new MongoTestEnvironment();
 		$e->clean();
 	}
@@ -51,7 +51,7 @@ class TestUserAPI extends UnitTestCase {
 	}
 	
 	function testUserCRUD_CRUDOK() {
-		$api = new jsonRPCClient("http://scriptureforge-publishing.local/api/sf", false);
+		$api = new jsonRPCClient("http://publishing.scriptureforge.local/api/sf", false);
 		
 		// Create
 		$param = array(
@@ -81,7 +81,7 @@ class TestUserAPI extends UnitTestCase {
 	}
 	
 	function testUserList_Ok() {
-		$api = new jsonRPCClient("http://scriptureforge-publishing.local/api/sf", false);
+		$api = new jsonRPCClient("http://publishing.scriptureforge.local/api/sf", false);
 		$result = $api->user_list();
 		
 		$this->assertTrue($result['count'] > 0);
@@ -91,7 +91,7 @@ class TestUserAPI extends UnitTestCase {
 		$e = new UserAPITestEnvironment();
 		$e->addUser('Some User');
 		
-		$api = new jsonRPCClient("http://scriptureforge-publishing.local/api/sf", false);
+		$api = new jsonRPCClient("http://publishing.scriptureforge.local/api/sf", false);
 		$result = $api->user_typeahead('ome');
 		
 		$this->assertTrue($result['count'] > 0);
@@ -103,7 +103,7 @@ class TestUserAPI extends UnitTestCase {
 		$e = new UserAPITestEnvironment();
 		$userId = $e->addUser('Some User');
 		
-		$api = new jsonRPCClient("http://scriptureforge-publishing.local/api/sf", false);
+		$api = new jsonRPCClient("http://publishing.scriptureforge.local/api/sf", false);
 		$result = $api->change_password($userId, '12345');
 		$e->dispose();
 		

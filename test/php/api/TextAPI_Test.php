@@ -22,7 +22,7 @@ class TextAPITestEnvironment
 	private $_idAdded = array();
 	
 	function __construct() {
-		$this->_api = new jsonRPCClient("http://scriptureforge-publishing.local/api/sf", false);
+		$this->_api = new jsonRPCClient("http://publishing.scriptureforge.local/api/sf", false);
 	}
 	
 	/**
@@ -49,7 +49,7 @@ class TestTextAPI extends UnitTestCase {
 	function testTextCRUD_CRUDOK() {
 		$e = new TextAPITestEnvironment();
 		$projectId = $e->createProject('project');
-		$api = new jsonRPCClient("http://scriptureforge-publishing.local/api/sf", false);
+		$api = new jsonRPCClient("http://publishing.scriptureforge.local/api/sf", false);
 		
 		// List
 		$result = $api->text_list($projectId);
