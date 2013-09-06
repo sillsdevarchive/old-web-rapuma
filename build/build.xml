@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE project>
+<project name="web-rapuma" default="build" basedir="..">
+
+	<property name="application.name" value="rapuma-web" />
+
+	<property name="build.number" value="0.0.0.0" />
+	<property name="build.output" value="output" />
+	<property name="build.packageFile" value="${build.output}/${application.name}.tgz" />
+	<property name="build.installPath" value="/var/www/scriptureforge.org_publishing-dev" />
+	<property name="build.uploadPath" value="/var/www/scriptureforge.org_publishing" />
+
+	<target name="clean" depends="cleanLibs">
+		<delete dir="${build.output}" quiet="true" />
+	</target>
+		
+	<target name="cleanLibs">
+	</target>
+
+	<target name="cleanInstall" depends="">
+		<delete dir="${build.installPath}" quiet="true" />
+	</target>
+
+	<target name="cleanUpload" depends="">
+		<delete dir="${build.uploadPath}" quiet="true" />
+	</target>
+
+	<target name="version">
+		<script language="javascript">
+			<![CDATA[depends
+			// getting the value
+			buildnumber = project.getProperty("build.number");
+			index = buildnumber.lastIndexOf(".");
+			project.setProperty("version", buildnumber.substring(0, index));
+			]]>
+		</script>
+		<echo>${version}</echo>
+	</target>
+	
+	<target name="prepare">
+		<mkdir dir="${build.output}" />
+	</target>
+
+	<target name="build" />
+
+	<target name="test-js">
+		 <exec executable="/usr/local/bin/karma">
+			 <arg value="start" />
+			 <arg file="test/karma.conf.js" />
+			 <arg value="--reporters" />
+			 <arg value="teamcity" />
+			 <arg value="--single-run" />
+		 </exec>
+	</target>
+
+	<target name="test-php" depends="prepare">
+		 <echo>##teamcity[importData type='junit' path='${build.output}/AllTests.xml']</echo>
+		 <exec executable="php" dir="test/php" output="${build.output}/AllTests.xml"  error="${build.output}/error.log" failonerror="true">
+			 <arg line="AllTests.php" />
+			 <arg value="-j" />
+		 </exec>
+	 </target>
+
+	<target name="test">
+		<antcall target="test-js" />
+		<antcall target="test-php" />
+	</target>
+			
+	<target name="copyWeb" depends="prepare">
+		<copy todir="${build.output}/package/htdocs">
+			<fileset dir="src"/>
+		</copy>
+		<copy todir="${build.output}/package/lib">
+			<fileset dir="lib"/>
+		</copy>
+	</target>
+	
+	<target name="package" depends="prepare,copyWeb" >
+		<tar 
+			destfile="${build.packageFile}"
+			basedir="${build.output}/package"
+			excludes="${build.packageFile}"
+			longfile="gnu"
+			compression="gzip" />
+	</target>
+
+	<target name="install" depends="package,cleanInstall">
+		<untar src="${build.packageFile}" dest="${build.installPath}" compression="gzip" />
+		<antcall target="restartWebServer" /> 
+	</target>
+	
+	<target name="restartWebServer">
+		<exec executable="/etc/init.d/apache2">
+			<arg value="restart" />
+		</exec>
+	</target>
+	
+	<target name="upload" depends="package,cleanUpload">
+		<untar src="${build.packageFile}" dest="${build.uploadPath}" compression="gzip" />
+		<exec dir="${build.installPath}" executable="rsync" failonerror="true">
+			<arg value="-vazHAX" />
+			<arg value="--delete-during" />
+			<arg value='--rsh=ssh -i ${upload.credentials}' />
+			<arg value="${build.uploadPath}/" />
+			<arg value="${upload.destination}" />
+		</exec>
+	</target>
+	
+	<!-- Development targets to help developers, not used for production -->
+	
+</project>
