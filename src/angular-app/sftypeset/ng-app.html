@@ -5,13 +5,7 @@
 			<li class="here"><a href="#/projects">My Projects</a></li>
 			<li><a href="/app/activity">Activity</a></li>
 		</ul>
-		<div class="sf-breadcrumbs" ng-controller="BreadcrumbCtrl">
-			<span><a href="#/projects">My Projects</a></span>
-			<span ng-repeat="breadcrumb in breadcrumbs"> &gt;
-				 <a ng-hide="$last" href="{{breadcrumb.url}}">{{breadcrumb.label}}</a>
-				 <span ng-show="$last" class="here">{{breadcrumb.label}}</a>
-			</span>
-		</div>
+		<ul id="top" breadcrumbs></ul>
 	</div>
 	<div ng-controller="MainCtrl">
 	<div ng-view></div>

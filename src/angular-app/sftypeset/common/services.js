@@ -1,39 +1,24 @@
 'use strict';
 
-/* Services */
+/* SF Typeset Services */
 
 angular.module('sftypeset.services', [])
-	.factory('breadcrumbService', ['$rootScope', '$routeParams', function($rootScope, $r) {
-		
-		var breadcrumbService = {};
-		
-		breadcrumbService.idmap = {};
-		
-		breadcrumbService.read = function() {
-			var crumbs = [];
-			var url = "#/project";
-			if ($r.projectId && this.idmap[$r.projectId]) {
-				url = url + "/" + $r.projectId;
-				crumbs.push({"label": this.idmap[$r.projectId].name, "url": url, 'type':'project'});
-			}
-			if ($r.textId && this.idmap[$r.textId]) {
-				url = url + "/" + $r.textId;
-				crumbs.push({"label": this.idmap[$r.textId].name, "url": url, 'type':'text'});
-			}
-			if ($r.questionId && this.idmap[$r.questionId]) {
-				url = url + "/" + $r.questionId;
-				crumbs.push({"label": this.idmap[$r.questionId].name, "url": url, 'type':'question'});
-			}
-			return crumbs;
+	.service('componentService', ['jsonRpc', function(jsonRpc) {
+		jsonRpc.connect('/api/sf'); // Note this doesn't actually 'connect', it simply sets the connection url.
+		this.read = function(projectId, componentId, callback) {
+			jsonRpc.call('component_read', [projectId, componentId], callback);
 		};
-		
-		breadcrumbService.updateMap = function(type, id, name) {
-			breadcrumbService.idmap[id] = {
-				'type': type,
-				'name': name
-			};
+		this.update = function(projectId, model, callback) {
+			jsonRpc.call('component_update', [projectId, model], callback);
 		};
-		
-		return breadcrumbService;
-		
-	}]);
+		this.remove = function(projectId, componentIds, callback) {
+			jsonRpc.call('component_delete', [projectId, componentIds], callback);
+		};
+		this.list = function(projectId, callback) {
+			jsonRpc.call('component_list_dto', [projectId], callback);
+		};
+		this.settings_dto = function(projectId, componentId, callback) {
+			jsonRpc.call('component_settings_dto', [projectId, componentId], callback);
+		};
+	}])
+	;

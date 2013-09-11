@@ -1,40 +1,35 @@
-<h2 style="font-weight:normal">Texts for {{project.name}}</h2>
+<h2 style="font-weight:normal">Components in {{project.name}}</h2>
 <form ng-show="rights.showControlBar" class="control-bar form-inline">
-	<button ng-show="rights.deleteOther" class="btn" ng-click="removeTexts()"><i class="icon-remove"></i>Remove Texts</button>
-	<button ng-show="rights.create" class="btn" ng-click="newTextCollapsed = !newTextCollapsed"><i class="icon-plus"></i>Add New Text</button>
-	<a ng-show="rights.editOther" class="btn" href="{{project.url}}/settings"><i class="icon-pencil"></i>Update Project</a>
+	<button ng-show="rights.deleteOther" class="btn" ng-click="removeComponents()"><i class="icon-remove"></i>Remove Components</button>
+	<button ng-show="rights.create" class="btn" ng-click="newComponentCollapsed = !newComponentCollapsed"><i class="icon-plus"></i>Add New Component</button>
+	<a ng-show="rights.editOther" class="btn" href="{{project.url}}/settings"><i class="icon-gear"></i>Project Settings</a>
 </form>
-<div class="new-item" collapse="newTextCollapsed">
+<div class="new-item" collapse="newComponentCollapsed">
 	<form class="well">
 	<fieldset>
-	<label>Title</label>
-	<input ng-model="title" class="span4" type="text" placeholder="Title"/>
-	<label>Text</label>
-	<textarea ng-model="content" class="span4" rows="4" placeholder="Paste the USX text here"></textarea>
+	<label>Name</label>
+	<input ng-model="title" class="span4" type="text" placeholder="Name"/>
 	<label></label>
-	<button type="submit" class="btn" ng-click="addText(); newTextCollapsed = true"><i class="icon-plus"></i>Add Text to Check</button>
+	<button type="submit" class="btn" ng-click="addComponent(); newComponentCollapsed = true"><i class="icon-pencil"></i>Add Component to Project</button>
 	</fieldset>
 	</form>
 </div>
 <hr />
-<div listview hide-if-empty="true" search="queryTexts()" items="texts" visible-items="visibleTexts" select="">
-<div ng-repeat="text in visibleTexts" class="details-row">
-	<ul class="inline" ng-class="{active: isSelected(text)}">
-		<li ng-show="rights.deleteOther" ><input type="checkbox" ng-checked="isSelected(text)" ng-click="updateSelection($event, text)" /></li>
-		<li><a href="{{text.url}}">
-			<div class="attention-block">
-				<span class="count">{{getQuestionCount(text)}}</span><br />
-				<span class="subtitle">questions</span>
-			</div>
-		</a></li>
-		<li>
-			<a href="{{text.url}}">
-				<span class="larger-text">{{text.title}}</span>
-			</a>
-		</li>
-		<li><a href="#">{{getUnreadAnswers(text)}} unread answers</a></li>
-		<li><a href="#">{{getUnreadComments(text)}} unread comments</a></li>
-	</ul>
-	<hr />
+<div listview hide-if-empty="true" search="queryComponents()" items="components" visible-items="visibleComponents" select="">
+	<table class="table" style="width: 100%">
+	<thead>
+	<tr>
+		<th width="16px" align="center"></th>
+		<th>Component</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr ng-repeat="component in visibleComponents" class="details-row" ng-class="{active: isSelected(component)}">
+		<td width="16px" align="center"><div ng-show="rights.deleteOther"><input type="checkbox" ng-checked="isSelected(component)" ng-click="updateSelection($event, component)" /></div></td>
+		<td><a href="{{component.url}}"><span class="larger-text">{{component.title}}</span></a></td>
+	</tr>
+	</tbody>
+	</table>
 </div>
+<hr />
 </div>

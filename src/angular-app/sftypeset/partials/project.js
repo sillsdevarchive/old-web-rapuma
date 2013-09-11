@@ -2,10 +2,10 @@
 
 angular.module(
 		'sftypeset.project',
-		[ 'sf.services', 'palaso.ui.listview', 'palaso.ui.typeahead', 'ui.bootstrap' ]
+		[ 'sf.services', 'palaso.ui.listview', 'palaso.ui.typeahead', 'ui.bootstrap', 'sgw.ui.breadcrumb' ]
 	)
-	.controller('ProjectCtrl', ['$scope', 'textService', '$routeParams', 'sessionService', 'breadcrumbService', 'linkService', 
-	                            function($scope, textService, $routeParams, ss, bcs, linkService) {
+	.controller('ProjectCtrl', ['$scope', 'componentService', '$routeParams', 'sessionService', 'breadcrumbService',
+	                            function($scope, componentService, $routeParams, ss, breadcrumbService) {
 		var projectId = $routeParams.projectId;
 		$scope.projectId = projectId;
 		
@@ -15,9 +15,17 @@ angular.module(
 		$scope.rights.create = false; 
 		$scope.rights.editOther = false; //ss.hasRight(ss.realm.SITE(), ss.domain.PROJECTS, ss.operation.EDIT_OTHER);
 		$scope.rights.showControlBar = $scope.rights.deleteOther || $scope.rights.create || $scope.rights.editOther;
-		
+
+		// Breadcrumb
+		breadcrumbService.set('top',
+				[
+				 {href: '/app/sftypeset#/projects', label: 'My Projects'},
+				 {href: '/app/sftypeset#/project/' + $routeParams.projectId, label: 'unknown'},
+				]
+		);
+
 		// Listview Selection
-		$scope.newTextCollapsed = true;
+		$scope.newComponentCollapsed = true;
 		$scope.selected = [];
 		$scope.updateSelection = function(event, item) {
 			var selectedIndex = $scope.selected.indexOf(item);
@@ -32,14 +40,14 @@ angular.module(
 			return item != null && $scope.selected.indexOf(item) >= 0;
 		};
 		// Listview Data
-		$scope.texts = [];
-		$scope.queryTexts = function() {
-			console.log("queryTexts()");
-			textService.list(projectId, function(result) {
+		$scope.components = [];
+		$scope.queryComponents = function() {
+			console.log("queryComponents()");
+			componentService.list(projectId, function(result) {
 				if (result.ok) {
-					$scope.texts = result.data.entries;
-					$scope.enhanceDto($scope.texts);
-					$scope.textsCount = result.data.count;
+					$scope.components = result.data.entries;
+					$scope.enhanceDto($scope.components);
+					$scope.componentsCount = result.data.count;
 
 					$scope.project = result.data.project;
 					$scope.project.url = linkService.project(projectId);
@@ -54,34 +62,34 @@ angular.module(
 			});
 		};
 		// Remove
-		$scope.removeTexts = function() {
-			console.log("removeTexts()");
-			var textIds = [];
+		$scope.removeComponents = function() {
+			console.log("removeComponents()");
+			var componentIds = [];
 			for(var i = 0, l = $scope.selected.length; i < l; i++) {
-				textIds.push($scope.selected[i].id);
+				componentIds.push($scope.selected[i].id);
 			}
 			if (l == 0) {
 				// TODO ERROR
 				return;
 			}
-			textService.remove(projectId, textIds, function(result) {
+			componentService.remove(projectId, componentIds, function(result) {
 				if (result.ok) {
 					$scope.selected = []; // Reset the selection
-					$scope.queryTexts();
+					$scope.queryComponents();
 					// TODO
 				}
 			});
 		};
 		// Add
-		$scope.addText = function() {
-			console.log("addText()");
+		$scope.addComponent = function() {
+			console.log("addComponent()");
 			var model = {};
 			model.id = '';
 			model.title = $scope.title;
 			model.content = $scope.content;
-			textService.update(projectId, model, function(result) {
+			componentService.update(projectId, model, function(result) {
 				if (result.ok) {
-					$scope.queryTexts();
+					$scope.queryComponents();
 				}
 			});
 		};
@@ -95,25 +103,25 @@ angular.module(
 			unreadComments: -8
 		};
 
-		$scope.getQuestionCount = function(text) {
-			return text.questionCount;
+		$scope.getQuestionCount = function(component) {
+			return component.questionCount;
 		};
 
-		$scope.getViewsCount = function(text) {
+		$scope.getViewsCount = function(component) {
 			return fakeData.viewsCount;
 		};
 
-		$scope.getUnreadAnswers = function(text) {
+		$scope.getUnreadAnswers = function(component) {
 			return fakeData.unreadAnswers;
 		};
 
-		$scope.getUnreadComments = function(text) {
+		$scope.getUnreadComments = function(component) {
 			return fakeData.unreadComments;
 		};
 		
 		$scope.enhanceDto = function(items) {
 			for (var i in items) {
-				items[i].url = linkService.text($scope.projectId, items[i].id);
+				items[i].url = linkService.component($scope.projectId, items[i].id);
 			}
 		};
 
@@ -237,7 +245,7 @@ angular.module(
 				}
 			});
 		};
-		$scope.addModeText = function(addMode) {
+		$scope.addModeComponent = function(addMode) {
 			return $scope.addModes[addMode].en;
 		};
 		$scope.addModeIcon = function(addMode) {
