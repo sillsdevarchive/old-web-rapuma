@@ -11,23 +11,19 @@
 </div>
 <hr />
 <div listview hide-if-empty="true" search="queryProjectsForUser()" items="projects" visible-items="visibleProjects" select="">
-	<div ng-repeat="project in visibleProjects" class="details-row">
-		<ul class="inline" ng-class="{active: isSelected(project)}">
-			<li ng-show="rights.deleteOther"><input type="checkbox" ng-checked="isSelected(project)" ng-click="updateSelection($event, project)" /></li>
-			<li><a href="{{project.url}}">
-				<div class="attention-block">
-				<span style="font-size: 24px">{{getTextCount(project)}}</span><br />
-					<span style=""> texts to check</span>
-				</div>
-			</a></li>
-			<li>
-				<a href="{{project.url}}">
-					<span class="larger-text">{{project.projectname}}</span>
-				</a>
-			</li>
-			<li><a href="#">{{getUnreadAnswers(project)}} unread answers</a></li>
-			<li><a href="#">{{getUnreadComments(project)}} unread comments</a></li>
-		</ul>
-		<hr />
-	</div>
+	<table class="table" style="width: 100%">
+	<thead>
+	<tr>
+		<th width="16px" align="center"></th>
+		<th>Project</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr ng-repeat="project in visibleProjects" class="details-row" ng-class="{active: isSelected(project)}">
+		<td width="16px" align="center"><div ng-show="rights.deleteOther"><input type="checkbox" ng-checked="isSelected(project)" ng-click="updateSelection($event, project)" /></div></td>
+		<td><a href="{{project.url}}"><span class="larger-text">{{project.projectname}}</span></a></td>
+	</tr>
+	</tbody>
+	</table>
 </div>
+<hr />
