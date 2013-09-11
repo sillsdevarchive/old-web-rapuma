@@ -2,7 +2,7 @@
 
 /* Services */
 
-angular.module('sfchecks.services', [])
+angular.module('sftypeset.services', [])
 	.factory('breadcrumbService', ['$rootScope', '$routeParams', function($rootScope, $r) {
 		
 		var breadcrumbService = {};

@@ -29,7 +29,7 @@ describe('Questions page (questions.js)', function() {
 		},
 	};
 
-	beforeEach(module('sfchecks.questions'));
+	beforeEach(module('sftypeset.questions'));
 
 	beforeEach(inject(function($rootScope, $controller) {
 		// Keep the root scope around for the test functions to use

@@ -38,7 +38,7 @@ describe('Project page (project.js)', function() {
 		func: {apply: function() {}},
 	};
 */
-	beforeEach(module('sfchecks.project'));
+	beforeEach(module('sftypeset.project'));
 
 	beforeEach(inject(function($rootScope, $controller) {
 		// Keep the root scope around for the test functions to use

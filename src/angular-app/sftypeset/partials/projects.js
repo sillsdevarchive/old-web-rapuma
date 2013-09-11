@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module(
-		'sfchecks.projects',
+		'sftypeset.projects',
 		[ 'sf.services', 'palaso.ui.listview', 'palaso.ui.typeahead', 'ui.bootstrap' ]
 	)
 	.controller('ProjectsCtrl', ['$scope', 'projectService', 'sessionService', 'linkService', function($scope, projectService, ss, linkService) {

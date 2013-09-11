@@ -2,7 +2,7 @@
 
 /* Filters */
 
-angular.module('sfchecks.filters', []).
+angular.module('sftypeset.filters', []).
   filter('urlencode', function() {
   	return function(text) {
   		return encodeURIComponent(text);
