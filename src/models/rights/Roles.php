@@ -50,6 +50,8 @@ class Roles {
 		$rights[] = Domain::TS_COMPONENTS + Operation::CREATE;
 		$rights[] = Domain::TS_COMPONENTS + Operation::EDIT_OTHER;
 		
+		self::$_rights[Realm::PROJECT][Roles::TYPE_SETTER] = $rights;
+		
 		// Project Admin
 		$rights = self::$_rights[Realm::PROJECT][Roles::TYPE_SETTER];
 		$rights[] = Domain::PROJECTS + Operation::EDIT_OWN;
@@ -65,7 +67,6 @@ class Roles {
 		$rights = array();
 		self::grantAllOnDomain($rights, Domain::USERS);
 		self::grantAllOnDomain($rights, Domain::PROJECTS);
-		self::grantAllOnDomain($rights, Domain::TEXTS);
 		self::grantAllOnDomain($rights, Domain::QUESTIONS);
 		self::grantAllOnDomain($rights, Domain::ANSWERS);
 		self::grantAllOnDomain($rights, Domain::COMMENTS);
